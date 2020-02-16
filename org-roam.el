@@ -163,10 +163,6 @@ If called interactively, then PARENTS is non-nil."
           (user-error "The Org-Roam caches aren't built! Please run org-roam--build-cache-async"))
         nil)))
 
-(defun org-roam--find-all-files ()
-  "Return all org-roam files."
-  (org-roam--find-files (file-truename org-roam-directory)))
-
 (defun org-roam--get-file-path (id &optional absolute)
   "Convert identifier `ID' to file path.
 
@@ -301,11 +297,12 @@ Optionally pass it the title, for a smart file name."
       (let ((backward-links (make-hash-table :test #'equal))
             (forward-links (make-hash-table :test #'equal))
             (file-titles (make-hash-table :test #'equal)))
-        (let* ((org-roam-files (org-roam--find-files org-roam-directory))
+        (let* ((org-roam-files (org-roam--find-all-files))
                (file-items (mapcar (lambda (file)
                                      (with-temp-buffer
                                        (insert-file-contents file)
-                                       (org-roam--parse-content file))) org-roam-files)))
+                                       (org-roam--parse-content file)))
+                                   org-roam-files)))
           (dolist (items file-items)
             (dolist (item items)
               (org-roam--insert-item

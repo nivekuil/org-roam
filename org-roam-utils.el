@@ -65,6 +65,10 @@
             (setq result (cons (file-truename file) result)))))
         result)))
 
+(defun org-roam--find-all-files ()
+  "Return all org-roam files."
+  (org-roam--find-files (file-truename org-roam-directory)))
+
 (defun org-roam--parse-content (&optional file-path)
   "Parse the current buffer, and return a list of items for processing."
   (org-element-map (org-element-parse-buffer) 'link
